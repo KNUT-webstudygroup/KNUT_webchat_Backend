@@ -24,3 +24,6 @@ app.post("/login", (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+// 웹소켓 서버의 역할 : KAFKA에서 일어난 이벤트(멘션,채팅)을 전달시키는 용도에 한정
+// HTTP 서버의 역할 : 그 외 전체.
