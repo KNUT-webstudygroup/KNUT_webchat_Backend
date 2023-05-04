@@ -10,6 +10,20 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const Register = [{
+  id: "hello",
+  pw: "dbalsrb",
+}]
+
+app.post("/regist", (req, res) => {
+  const { id, pw } = req.body;
+  console.log("req.body", req.body);
+  Register.push({
+    id,
+    pw,
+  })
+})
+
 app.get("/", (req, res) => {
   res.json({ key: "value" });
 });
