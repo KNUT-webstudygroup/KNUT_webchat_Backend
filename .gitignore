@@ -27,3 +27,6 @@ dist-ssr
 *.css.map
 *.http
 /.vscode/*
+# Prisma
+.env
+/src/db/*
