@@ -1,0 +1,36 @@
+name: Buildserver
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+      - name: Install dependencies2
+        run: npm install
+      - name: Install dependencies sass
+        run: npm install sass
+      - name: Build project
+        run: npm run build
+
+
+      - name: Upload production-ready build files
+        uses: actions/upload-pages-artifact@v1
+        with:
+          name: github-pages
+          path: docs/
