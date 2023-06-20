@@ -24,6 +24,7 @@ datasource db {
 model User {
   // 사용자 정보
   id       Int     @id @default(autoincrement())
+  pw       String  
   phone    String? @db.VarChar(32)
 
   createdAt DateTime @default(now())
