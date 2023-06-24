@@ -1,3 +1,5 @@
+import { Request,Response } from "express" 
+
 /** 
  * @LuticaCANARD
  * 기능 구현 명세 :
@@ -15,3 +17,15 @@
  * - 토큰과 계정은 n:1 관계임에 유의
  * - 토큰은 서버간 통신으로 받아옴...
  */
+const Register = [{
+	id: "hello",
+	pw: "dbalsrb",
+}] // ?
+export const memberRegister = (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
+	const { id, pw } = req.body;
+	console.log("req.body", req.body);
+	Register.push({
+		id,
+		pw,
+	})
+}

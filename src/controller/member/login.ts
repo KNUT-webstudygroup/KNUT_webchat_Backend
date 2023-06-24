@@ -1,3 +1,5 @@
+import { Request,Response } from "express" 
+
 /** 
  * @LuticaCANARD
  * 기능 구현 명세 :
@@ -5,7 +7,7 @@
  * - 2: Pw는 규정된 해싱 방법으로 가공 ~> 솔트는 생각해봄 
  * - 3: ID / (해싱된) PW 가 같은 멤버정보 취득 
  * - 4: 있다면 UUID를 통하여 세션 발급하고 세션값 갱신을 통하여 유저정보 삽입.
- * - 5: 세션은 redis에 저장함.(추가젃 사항이므로 일단 구현 안해도됨.)
+ * - 5: 세션은 redis에 저장함.(추가전 사항이므로 일단 구현 안해도됨.)
  */
 
 /**
@@ -16,3 +18,15 @@
  * 
  */
 
+/**
+ * @LuticaCANARD
+ * - login endpoint를 처리할 때 사용할 함수
+ */
+
+export const userLogin = (req:Request<{}, any, any, Record<string, any>>,res:Response) =>{
+
+	console.log(
+    `요청에서 온 아이디는 ${req.body.id}, 비밀번호는 ${req.body.pw}입니다.`
+  );
+  res.json({ key: true });
+}
