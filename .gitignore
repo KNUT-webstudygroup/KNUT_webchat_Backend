@@ -30,3 +30,4 @@ dist-ssr
 # Prisma
 .env
 /src/db/*
+package-lock.json
