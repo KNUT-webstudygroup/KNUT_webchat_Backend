@@ -20,5 +20,3 @@ export const db = new Kysely<DB>({ // DB는 prisma-kysely를 통해 만들어진
     password: genSecret()?.password || '',
   }),
 });
-
-// mongoDB 는 채팅때
