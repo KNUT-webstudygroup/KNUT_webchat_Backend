@@ -24,11 +24,24 @@ datasource db {
 model User {
   // 사용자 정보
   id       Int     @id @default(autoincrement())
+  loginId  String
   pw       String  
   phone    String? @db.VarChar(32)
+  email    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@map("USERS")
+}
+
+
+model AccountFindQuest{
+  loginId  String
+  email       String
+  questindex  Int
+  quest       String
+  answer      String
+  @@id([email, questindex])
+  @@index([email, questindex])
 }

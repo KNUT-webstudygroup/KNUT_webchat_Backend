@@ -5,17 +5,29 @@ import { createServer } from "http";
 import { WebSocket } from "ws";
 import { userLogin } from "./controller/member/login"
 import { memberRegister } from './controller/member/register';
+import session from 'express-session'
+import IdPwFinderRouter from './controller/member/findIdPw'
 
 // http 서버 넣어주자.
 const port = 4300;
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.Router());
+app.use(
+  session({
+    secret: process.env["session_salt"]||"AMUSOGUM",
+    resave: false,
+    saveUninitialized: true,
+  })
+
+)
 
 app.get("/", (req, res) => {
   res.json({ key: "value" });
 });
 
+app.use('/idpwfind',IdPwFinderRouter);
 app.post("/regist", memberRegister)
 app.post("/login", userLogin);
 
