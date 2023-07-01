@@ -2,21 +2,15 @@
 
 import { DB } from '../db/types';
 import { Kysely } from 'kysely'
-import { PlanetScaleDialect } from 'kysely-planetscale'
+import { MysqlDialect } from 'kysely';
+import { createPool } from 'mysql2';
 
-const genSecret = () => {
-  if (process.env.DATABASE_URL) {
-    const url = process.env.DATABASE_URL.split('/')[2];
-    const username = url.split(':')[0];
-    const password = url.split(':')[1].split('@')[0];
-    return { username, password };
-  }
-};
-
-export const db = new Kysely<DB>({ // DB는 prisma-kysely를 통해 만들어진 타입입니다.
-  dialect: new PlanetScaleDialect({
-    host: 'aws.connect.psdb.cloud',
-    username: genSecret()?.username || '',
-    password: genSecret()?.password || '',
+export const db = new Kysely<DB>({ 
+  // DB는 prisma-kysely를 통해 만들어진 타입입니다.
+  dialect: new MysqlDialect({
+    pool: createPool({
+      database: 'knut-web-dev',
+      host: process.env.DATABASE_URL,
+    })
   }),
 });
