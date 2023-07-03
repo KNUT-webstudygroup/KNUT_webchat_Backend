@@ -18,7 +18,7 @@
     "nodemon": "^2.0.22",
     "prisma": "^4.15.0",
     "prisma-kysely": "^1.4.2",
-    "socket.io": "^4.6.1",
+    "socket.io": "^4.7.1",
     "ts-node": "^10.9.1",
     "typeorm": "^0.3.15",
     "typescript": "^5.0.3",
