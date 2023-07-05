@@ -7,7 +7,7 @@ import { userLogin } from "./controller/member/login"
 import { memberRegister } from './controller/member/register';
 import session from 'express-session'
 import IdPwFinderRouter from './controller/member/findIdPw'
-import dotenv from 'dotenv'
+import dotenv from 'dotenv' 
 dotenv.config() //...
 
 // http 서버 넣어주자.

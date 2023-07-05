@@ -8,10 +8,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const genSecret = () => {
-  if (process.env.DATABASE_URL) {
+  if (process.env.DATABASE_URL) { 
     const us = process.env.DATABASE_URL.split('/');
     const url = us[2] ;
-    console.log(url)
     const middle = url.split(':')
     const username = middle[0];
     const password = middle[1].split('@')[0];
@@ -21,9 +20,6 @@ const genSecret = () => {
     return { username:username, password:password,dbname : db_name,host:host};
   }
 };
-
-console.log("DB INFOS : ")
-console.log(genSecret());
 /*export const db = new Kysely<DB>({ // DB는 prisma-kysely를 통해 만들어진 타입입니다.
   dialect: new PlanetScaleDialect({
     url:process.env.DATABASE_URL
