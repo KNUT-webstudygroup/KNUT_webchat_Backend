@@ -1,4 +1,8 @@
-import { Request,Response } from "express" 
+import { Request, Response } from "express"
+import { PrismaClient } from '@prisma/client'
+import { RedisFlushModes } from "redis";
+import { parseWhen } from "kysely/dist/cjs/parser/binary-operation-parser";
+
 
 /** 
  * @LuticaCANARD
@@ -17,15 +21,16 @@ import { Request,Response } from "express"
  * - 토큰과 계정은 n:1 관계임에 유의
  * - 토큰은 서버간 통신으로 받아옴...
  */
-const Register = [{
-	id: "hello",
-	pw: "dbalsrb",
-}] // ?
-export const memberRegister = (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
+const prisma = new PrismaClient();
+  
+export const memberRegister = async (req: Request<{}, any, any, Record<string, any>>, res: Response) => {
 	const { id, pw } = req.body;
+	await prisma.user.create({
+		data: {
+		  loginId: id,
+		  pw: pw,
+		  email: "user@test1.com",
+		},
+	  });
 	console.log("req.body", req.body);
-	Register.push({
-		id,
-		pw,
-	})
 }

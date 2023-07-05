@@ -4,30 +4,30 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 generator kysely {
-    provider = "prisma-kysely"
-    // 타입이 생성될 디렉토리
-    output = "../src/db"
-    // 타입이 생성될 파일명
-    fileName = "types.ts"
-    // Optionally generate runtime enums to a separate file
-    enumFileName = "enums.ts"
+  provider     = "prisma-kysely"
+  // 타입이 생성될 디렉토리
+  output       = "../src/db"
+  // 타입이 생성될 파일명
+  fileName     = "types.ts"
+  // Optionally generate runtime enums to a separate file
+  //enumFileName = "enums.ts"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
-
 }
 
 model User {
   // 사용자 정보
-  id       Int     @id @default(autoincrement())
-  loginId  String
-  pw       String  
-  phone    String? @db.VarChar(32)
-  email    String
+  id      Int     @id @default(autoincrement())
+  loginId String  
+  pw      String
+  phone   String? @db.VarChar(32)
+  email   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -35,13 +35,13 @@ model User {
   @@map("USERS")
 }
 
+model AccountFindQuest {
+  loginId    String
+  email      String
+  questindex Int
+  quest      String
+  answer     String
 
-model AccountFindQuest{
-  loginId  String
-  email       String
-  questindex  Int
-  quest       String
-  answer      String
   @@id([email, questindex])
   @@index([email, questindex])
 }

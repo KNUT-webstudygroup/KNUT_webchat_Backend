@@ -1,4 +1,5 @@
-import { Request,Response } from "express" 
+import { Request, Response } from "express"
+import { PrismaClient } from "@prisma/client";
 
 /** 
  * @LuticaCANARD
@@ -22,11 +23,16 @@ import { Request,Response } from "express"
  * @LuticaCANARD
  * - login endpoint를 처리할 때 사용할 함수
  */
+const prisma = new PrismaClient();
 
-export const userLogin = (req:Request<{}, any, any, Record<string, any>>,res:Response) =>{
-
-	console.log(
+export const userLogin = async (req: Request<{}, any, any, Record<string, any>>, res: Response) => {
+  const { id, pw } = req.body;
+  console.log(
     `요청에서 온 아이디는 ${req.body.id}, 비밀번호는 ${req.body.pw}입니다.`
   );
-  res.json({ key: true });
+  const result = await prisma.user.findFirst({
+    where: { loginId : id },
+  });
+  console.log(result.pw);
+  result.pw == pw ? res.json({ key: true }) : res.json({ key: false })
 }

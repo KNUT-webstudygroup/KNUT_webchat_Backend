@@ -18,18 +18,17 @@ app.use(cors());
 app.use(express.Router());
 app.use(
   session({
-    secret: process.env["session_salt"]||"AMUSOGUM",
+    secret: process.env["session_salt"] || "AMUSOGUM",
     resave: false,
     saveUninitialized: true,
   })
-
 )
 
 app.get("/", (req, res) => {
   res.json({ key: "value" });
 });
 
-app.use('/idpwfind',IdPwFinderRouter);
+app.use('/idpwfind', IdPwFinderRouter);
 app.post("/regist", memberRegister)
 app.post("/login", userLogin);
 
