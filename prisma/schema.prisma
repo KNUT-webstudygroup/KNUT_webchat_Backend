@@ -28,7 +28,7 @@ model User {
   pw       String  
   phone    String? @db.VarChar(32)
   email    String
-
+  AccountFindQuests AccountFindQuest[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
@@ -37,11 +37,14 @@ model User {
 
 
 model AccountFindQuest{
+  userId      Int
+  user        User @relation(fields: [userId], references: [id] ,onDelete: Cascade)
+  // 유저는 1 : 질문은 N이므로. 회원이 삭제되면 질문도 삭제되어야 하므로. 
   loginId  String
   email       String
   questindex  Int
   quest       String
   answer      String
-  @@id([email, questindex])
-  @@index([email, questindex])
+  @@id([userId, questindex])
+  @@index([userId, questindex])
 }
