@@ -1,0 +1,17 @@
+version: "3.1"
+
+services:
+  server : #일단 대규모화가 진행되기 전까지는 유지할 것.
+  # 원한다면 적은 이벤트는 람다로 해도 됨.
+    restart: always
+    build:
+      context: .
+      dockerfile: /.dockerfile
+    environment:
+      - server_set=db
+    ports:
+      - "3000:3000"
+    command: >
+      npm run dev
+    volumes:
+      - ./:/app

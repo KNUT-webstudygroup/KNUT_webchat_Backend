@@ -8,10 +8,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const genSecret = () => {
-  if (process.env.DATABASE_URL) {
+  if (process.env.DATABASE_URL) { 
     const us = process.env.DATABASE_URL.split('/');
     const url = us[2] ;
-    console.log(url)
     const middle = url.split(':')
     const username = middle[0];
     const password = middle[1].split('@')[0];

@@ -26,6 +26,6 @@ export const memberRegister = (req:Request<{}, any, any, Record<string, any>>,re
 	console.log("req.body", req.body);
 	Register.push({
 		id,
-		pw,
+		pw, 
 	})
 }
