@@ -20,9 +20,6 @@ const genSecret = () => {
     return { username:username, password:password,dbname : db_name,host:host};
   }
 };
-
-console.log("DB INFOS : ")
-console.log(genSecret());
 /*export const db = new Kysely<DB>({ // DB는 prisma-kysely를 통해 만들어진 타입입니다.
   dialect: new PlanetScaleDialect({
     url:process.env.DATABASE_URL
