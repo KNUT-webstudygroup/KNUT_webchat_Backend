@@ -54,6 +54,7 @@ const killBotGuards = async (req: Request, res: Response) => {
 // 사실 cloudflare 들고 날르면 되긴 하는데 기초적인 절차구현해둘까 싶긴함
 // robot.txt는 도입할데가 없
 // TIMEOUT 도입해야할듯
+	return res.json({}) // 뭐 일단 아무것도 안오면...
 }
 
 const router = Router();
