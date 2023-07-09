@@ -15,7 +15,7 @@ export const findIdFromEmail = async (email: string) : Promise<{
 	.select(["USERS.loginId"])
 	.execute(); 
 	return ret;
-}
+} 
 
 export const getUserSecureQuest = async (id: string) : Promise<{
 	quest: string;
