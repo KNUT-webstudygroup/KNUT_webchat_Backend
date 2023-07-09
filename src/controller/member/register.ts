@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import { register } from "../../model/member";
+import { hashPw } from "../../utils/crypto";
 
 /** 
  * @LuticaCANARD
@@ -25,5 +26,8 @@ const Register = [{
 export const memberRegister = async (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
 	const { id, email, pw } = req.body;
 	console.log("req.body", req.body);
-	await register(id, email, pw);
+	// 비밀번호 해시
+	const hashedPw = hashPw(pw);
+	//console.log(hashedPw);
+	await register(id, email, hashedPw);
 }
