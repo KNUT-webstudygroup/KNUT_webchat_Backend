@@ -46,6 +46,16 @@ export const getUserInfoByEmail = async (email: string) : Promise<{email:string}
 		.executeTakeFirst();
 }
 
+export const checkPw = async (loginId: string, pw: string) : Promise<{pw:string}> => {
+	// 비밀번호가 일치하는지 확인
+	return await db
+		.selectFrom("USERS")
+		.where("loginId", "=", loginId)
+		.where("pw", "=", pw)
+		.select(["USERS.pw"])
+		.executeTakeFirst();
+}
+
 export const register = async (loginId: string, email: string, pw: string, phone?: string) : Promise<InsertResult[]> => {
 	// USERS 테이블에 회원가입 유저 정보 삽입
 	return await db.insertInto("USERS").values({ loginId, pw, email, phone }).execute();
