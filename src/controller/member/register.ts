@@ -1,4 +1,5 @@
-import { Request,Response } from "express" 
+import { Request,Response } from "express";
+import { register } from "../../model/member";
 
 /** 
  * @LuticaCANARD
@@ -21,11 +22,8 @@ const Register = [{
 	id: "hello",
 	pw: "dbalsrb",
 }] // ?
-export const memberRegister = (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
-	const { id, pw } = req.body;
+export const memberRegister = async (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
+	const { id, email, pw } = req.body;
 	console.log("req.body", req.body);
-	Register.push({
-		id,
-		pw,
-	})
+	await register(id, email, pw);
 }

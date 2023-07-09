@@ -23,7 +23,7 @@ const genSecret = () => {
 });*/
 const dialect = new MysqlDialect({
 	pool: createPool({
-		database: "knut-web-dev",
+		database: "seoro",
 		host: "gcp.connect.psdb.cloud",
 		user: genSecret()?.username||'',
 		password: genSecret()?.password||'',
