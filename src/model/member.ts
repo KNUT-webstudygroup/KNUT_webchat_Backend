@@ -28,6 +28,15 @@ export const getUserSecureQuest = async (id: string) : Promise<{
 	.execute();
 }
 
+export const getUserInfoByLoginId = async (loginId: string) : Promise<{loginId:string}> => {
+	// 같은 로그인 아이디가 존재하는지 찾기
+	return await db
+		.selectFrom("USERS")
+		.where("loginId", "=", loginId)
+		.select(["USERS.loginId"])
+		.executeTakeFirst();
+}
+
 export const getUserInfoByEmail = async (email: string) : Promise<{email:string}> => {
 	// 같은 이메일이 존재하는지 찾기
 	return await db

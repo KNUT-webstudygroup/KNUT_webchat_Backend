@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getUserInfoByEmail, register } from "../../model/member";
+import { getUserInfoByEmail, getUserInfoByLoginId, register } from "../../model/member";
 import { hashPw } from "../../utils/crypto";
 
 /** 
@@ -26,6 +26,13 @@ const Register = [{
 export const memberRegister = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
 	const { id, email, pw } = req.body;
 	console.log("req.body", req.body);
+
+	// 같은 로그인 아이디가 존재하는지 찾기
+	const existingLoginId = await getUserInfoByLoginId(id);
+	if(existingLoginId) {
+		console.log("이미 가입된 아이디입니다.");
+		return res.status(403).json({}); // 존재하면 403 에러 메시지 전송
+	}
 
 	// 같은 이메일이 존재하는지 찾기
 	const existingEmail = await getUserInfoByEmail(email);
