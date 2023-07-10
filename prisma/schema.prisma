@@ -23,16 +23,16 @@ datasource db {
 
 model User {
   // 사용자 정보
-  id       Int     @id @default(autoincrement())
+  id       Int     @id @default(autoincrement()) // 기본 키로 지정
   loginId  String
   pw       String  
-  phone    String? @db.VarChar(32)
   email    String
+  phone    String? @db.VarChar(32)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt // 업데이트 시 자동으로 현재 시간으로 갱신
 
-  @@map("USERS")
+  @@map("USERS") //  DB의 USERS 테이블과 매핑
 }
 
 

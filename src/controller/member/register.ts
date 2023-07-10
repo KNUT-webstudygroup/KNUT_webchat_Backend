@@ -1,4 +1,6 @@
-import { Request,Response } from "express" 
+import { Request,Response } from "express";
+import { getUserInfoByEmail, getUserInfoByLoginId, register } from "../../model/member";
+import { hashPw } from "../../utils/crypto";
 
 /** 
  * @LuticaCANARD
@@ -21,11 +23,36 @@ const Register = [{
 	id: "hello",
 	pw: "dbalsrb",
 }] // ?
-export const memberRegister = (req:Request<{}, any, any, Record<string, any>>,res:Response) => {
-	const { id, pw } = req.body;
+export const memberRegister = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
+	const { id, email, pw } = req.body;
 	console.log("req.body", req.body);
-	Register.push({
-		id,
-		pw, 
-	})
+
+	// 같은 로그인 아이디가 존재하는지 찾기
+	const existingLoginId = await getUserInfoByLoginId(id);
+	if(existingLoginId) {
+		console.log("이미 가입된 아이디입니다.");
+		return res.status(403).json({}); // 존재하면 403 에러 메시지 전송
+	}
+
+	// 같은 이메일이 존재하는지 찾기
+	const existingEmail = await getUserInfoByEmail(email);
+	if(existingEmail) {
+		console.log("이미 가입된 이메일입니다.");
+		return res.status(403).json({}); // 존재하면 403 에러 메시지 전송
+	}
+
+	// 비밀번호 해시
+	const hashedPw = hashPw(pw);
+
+	// DB에 회원가입 유저 정보 삽입
+	const result = await register(id, email, hashedPw);
+
+	if(result[0]?.numInsertedOrUpdatedRows > 0) {
+		console.log("정상적으로 회원가입 되었습니다.");
+		return res.status(200).json({});
+	}
+	else {
+		console.log("서버로부터 요청이 거부되었습니다.");
+		return res.status(500).json({});
+	}
 }

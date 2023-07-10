@@ -8,6 +8,7 @@
     "@types/redis": "^4.0.11",
     "@types/ws": "^8.5.4",
     "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
@@ -27,6 +28,9 @@
   "scripts": {
     "build": "prisma generate & tsc",
     "start": "node ./dist/server.js",
-    "dev": "nodemon -L --watch src/ --exec ts-node src/server.ts "
+    "dev": "nodemon -L --watch src/ --exec ts-node src/server.ts"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1"
   }
 }
