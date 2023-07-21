@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getUserInfoByLoginId, checkPw } from "../../model/member";
 import { hashPw } from "../../utils/crypto";
+import { client } from "../../utils/mongodb";
 
 /** 
  * @LuticaCANARD
