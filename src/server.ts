@@ -33,6 +33,8 @@ app.use('/idpwfind',IdPwFinderRouter);
 app.post("/regist", memberRegister)
 app.post("/login", userLogin);
 
+
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
