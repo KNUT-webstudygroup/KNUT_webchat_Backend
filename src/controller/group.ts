@@ -8,3 +8,13 @@
  * - 5. ID발급시 웹소켓이 살아있다면 바로 업데이트 신호
  * - 6. MYSQL 단에서 서버의 업데이트 시간을 변경... > 유저의 버전관리때 쓸 수 있음.(캐싱의 일종)
  */
+
+
+
+import {User} from '../types/member'
+
+let udserid = 1;
+const user:User = {
+    id:udserid
+}
+

@@ -3,5 +3,15 @@
  */
 
 export type User = {
-	
+	id:number
+}
+export type Group ={
+    users:User[]
+    chattings:ChatMessage[]// order by time?
+
+}
+export type ChatMessage = {
+    message:string
+    sender :string
+    time:Date
 }
