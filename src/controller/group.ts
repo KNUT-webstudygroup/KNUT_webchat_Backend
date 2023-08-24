@@ -1,3 +1,6 @@
+import { Request, Response } from "express";
+import { createGroup } from "../model/group";
+
 /**
  * @LuticaCANARD
  * 기능 명세 :
@@ -18,3 +21,18 @@ const user:User = {
     id:udserid
 }
 
+export const groupController = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
+	const { groupName, admin, capacity, total, groupDesc, groupTag } = req.body;
+	console.log("req.body", req.body);
+    
+    const result = await createGroup(groupName, admin, capacity, total, groupDesc, groupTag);
+
+    if(result[0]?.numInsertedOrUpdatedRows > 0) {
+		console.log("새로운 워크스페이스가 생성되었습니다.");
+		return res.status(200).json({});
+	}
+	else {
+		console.log("서버로부터 요청이 거부되었습니다.");
+		return res.status(500).json({});
+    }
+}

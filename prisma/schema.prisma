@@ -36,6 +36,28 @@ model User {
   @@map("USERS") //  DB의 USERS 테이블과 매핑
 }
 
+model UserGroup{
+  userid  Int
+  groupId Int
+  @@id([userid,groupId])
+  @@index([userid])
+  @@index([groupId])
+}
+
+model Group{
+  // 그룹 정보
+  groupId Int @id @default(autoincrement())
+  groupName String
+  groupDesc String // 그룹 소개
+  groupTag String // 그룹 관심사
+  admin Int // 그룹 관리자 id
+  capacity Int // 그룹 최대 인원수
+  total Int // 그룹 현재 인원수
+
+  CreatedAt DateTime @default(now())
+
+  @@map("GROUPS")
+}
 
 model AccountFindQuest{
   userId      Int

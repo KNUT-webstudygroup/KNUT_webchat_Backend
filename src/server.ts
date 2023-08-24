@@ -8,6 +8,7 @@ import { memberRegister } from './controller/member/register';
 import session from 'express-session'
 import IdPwFinderRouter from './controller/member/findIdPw'
 import dotenv from 'dotenv' 
+import { groupController } from "./controller/group";
 dotenv.config() //...
 
 // http 서버 넣어주자.
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.use('/idpwfind',IdPwFinderRouter);
 app.post("/regist", memberRegister)
 app.post("/login", userLogin);
+app.post("/group", groupController);
 
 
 
