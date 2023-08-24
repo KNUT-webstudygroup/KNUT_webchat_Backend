@@ -93,7 +93,7 @@ model GroupChats{
   groupId Int
   userId  Int // 발신자
   message String // 보낸 메시지
-  imageLinkId Int? // 이미지의 링크들이 담긴 ID
+  imageLinkId Int? // 이미지의 링크들이 담긴 ID if null, there is no images
   sendTime DateTime @default(now()) //보낸 시간
   
   @@unique([groupId,userId,sendTime]) //일단 임시방편
