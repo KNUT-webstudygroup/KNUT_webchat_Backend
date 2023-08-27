@@ -49,3 +49,62 @@ model AccountFindQuest{
   @@id([userId, questindex])
   @@index([userId, questindex])
 }
+
+
+
+// 이하 채팅
+model UserGroup{
+  userid  Int
+  groupId Int
+  @@id([userid,groupId])
+  @@index([userid])
+  @@index([groupId])
+}
+
+model Group{
+  // 그룹 정보
+  // 그룹의 관심사는 여러개였나 하나였나...
+  groupId Int @id @default(autoincrement())
+  groupName String
+  groupDesc String // 그룹 소개
+  groupTag String // 그룹 관심사
+  admin Int // 그룹 관리자 id
+  capacity Int // 그룹 최대 인원수
+  total Int // 그룹 현재 인원수
+
+  createdAt DateTime @default(now())
+
+  @@map("GROUPS")
+}
+
+model GroupTags{
+  // 그룹의 태그가 여러개인 경우.
+  groupId Int
+  groupTag String
+  @@id([groupId,groupTag])
+}
+
+model GroupChats{
+  // 감안해야 할 부분 :
+  // 보낸시간+유저+그룹을 pk로 잡는다면, 보낸 시간을 pk로 잡는 점에 관해서, https://jjongwoo.tistory.com/49
+  // 생각보다 충돌이 잦을 수 있음을 유의하자.
+  // 만약 그룹별 증가를 쓴다면, 이걸 prisma로 만들어보자.
+
+  groupId Int
+  userId  Int // 발신자
+  message String // 보낸 메시지
+  imageLinkId Int? // 이미지의 링크들이 담긴 ID if null, there is no images
+  sendTime DateTime @default(now()) //보낸 시간
+  
+  @@unique([groupId,userId,sendTime]) //일단 임시방편
+  @@index([groupId])
+
+}
+
+model GroupChatsImage{
+  imageLinkId Int 
+  count Int
+  link String
+  @@id([imageLinkId,count])
+  @@index([imageLinkId])
+}
