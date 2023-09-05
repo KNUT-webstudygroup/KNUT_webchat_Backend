@@ -1,5 +1,5 @@
 /**
- * @LuticaCANARD
+ * @author LuticaCANARD
  * 기능 명세 :
  * - 1. 인증된 유저가 그룸에 채팅을 보내고 싶다...
  * - 2. 일단 SQL injection 검사(보통 됨)
