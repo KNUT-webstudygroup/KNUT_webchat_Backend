@@ -1,3 +1,5 @@
+import { Request,Response } from "express";
+
 /**
  * @author LuticaCANARD
  * 기능 명세 :
@@ -9,14 +11,17 @@
  * - 6. 이미지를 보냈다면 이미지 검증 (해킹의 위험) 후 CDN에 넣기 (차후)  
  */
 
-export const ChatSendProcessor = async () =>
+export const ChatSendProcessor = async (req:Request<{}, any, any, Record<string, any>>, res:Response) =>
 {
     /**
      * TODO : 0910 // 채팅 수발신 구현.
      * - 단독집행
      * > 1) XSS / SQL injection 공격방어 검사
      * > 2) 유저 번호를 받고-> 세션이 가진 유저번호와 같은지 검사하고 -> 서버번호 검증 -> 메세지 삽입 (끝)
-     * 
+     * >> 메세지 삽입시 유의사항 :
+     * - WS의 사용이 확인된 바, ws메세지 발신을 추진한다.
+     * - 결정에 따라서 몽고DB의 사용을 정의.
+     * - 채팅 입력받는건 HTTP로 받자.
      */
 
     
