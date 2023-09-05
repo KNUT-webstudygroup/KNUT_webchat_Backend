@@ -12,6 +12,10 @@
 export const ChatSendProcessor = async () =>
 {
     /**
+     * TODO : 0910 // 채팅 수발신 구현.
+     * - 단독집행
+     * > 1) XSS / SQL injection 공격방어 검사
+     * > 2) 유저 번호를 받고-> 세션이 가진 유저번호와 같은지 검사하고 -> 서버번호 검증 -> 메세지 삽입 (끝)
      * 
      */
 
