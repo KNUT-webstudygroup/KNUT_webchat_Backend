@@ -1,5 +1,5 @@
-import { Request,Response } from "express";
-
+import {Socket} from 'socket.io';
+import { insertChat } from '../model/chatprocess';
 /**
  * @author LuticaCANARD
  * 기능 명세 :
@@ -11,7 +11,7 @@ import { Request,Response } from "express";
  * - 6. 이미지를 보냈다면 이미지 검증 (해킹의 위험) 후 CDN에 넣기 (차후)  
  */
 
-export const ChatSendProcessor = async (req:Request<{}, any, any, Record<string, any>>, res:Response) =>
+export const ChatSendProcessor = async (req:Socket) =>
 {
     /**
      * TODO : 0910 // 채팅 수발신 구현.
@@ -23,6 +23,18 @@ export const ChatSendProcessor = async (req:Request<{}, any, any, Record<string,
      * - 결정에 따라서 몽고DB의 사용을 정의.
      * - 채팅 입력받는건 HTTP로 받자.
      */
+    
+    /*
+    Schema
+    {
+        group_id : number
+        chat : ""
+    }
+    */
+    const group_id = Number(req.data["group_id"])
+    req.
+    const content = req.data["chat"]
+    insertChat(group_id,,content)    
 
     
 }
