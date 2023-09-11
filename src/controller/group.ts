@@ -21,7 +21,7 @@ const user:User = {
     id:udserid
 }
 
-export const groupController = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
+export const groupController = async (req:Request, res:Response) => {
 	const { groupName, admin, capacity, total, groupDesc, groupTag } = req.body;
 	console.log("req.body", req.body);
     

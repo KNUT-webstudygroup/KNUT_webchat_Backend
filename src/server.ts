@@ -17,7 +17,8 @@ declare module "http" { // d.ts만들어서 나중에 분리하기.
   interface IncomingMessage {
       session: session.Session & {
           authenticated: boolean,
-          count:number
+          count:number,
+          userid
       }
   }
 }

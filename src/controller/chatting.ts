@@ -32,9 +32,9 @@ export const ChatSendProcessor = async (req:Socket) =>
     }
     */
     const group_id = Number(req.data["group_id"])
-    req.
+    //req.
     const content = req.data["chat"]
-    insertChat(group_id,,content)    
+    //insertChat(group_id,,content)    
 
     
 }

@@ -23,7 +23,7 @@ const Register = [{
 	id: "hello",
 	pw: "dbalsrb",
 }] // ?
-export const memberRegister = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
+export const memberRegister = async (req:Request, res:Response) => {
 	const { id, email, pw } = req.body;
 	console.log("req.body", req.body);
 
