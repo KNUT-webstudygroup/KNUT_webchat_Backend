@@ -45,17 +45,46 @@ model UserGroup{
 
 model Group{
   // 그룹 정보
-  groupId Int @id @default(autoincrement())
-  groupName String
-  groupDesc String // 그룹 소개
-  groupTag String // 그룹 관심사
+  id Int @id @default(autoincrement())
+  name String
+  desc String // 그룹 소개
+  tag String // 그룹 관심사
   admin Int // 그룹 관리자 id
   capacity Int // 그룹 최대 인원수
   total Int // 그룹 현재 인원수
 
   CreatedAt DateTime @default(now())
+  //groupProfile GroupProfile?
+  messages Message[]
 
+  //@@unique([name, desc])
   @@map("GROUPS")
+}
+
+// GroupProfile 테이블 생성 작업은 일단 보류...
+// model GroupProfile{
+//   // 그룹 정보 개요
+//   id Int @id @default(autoincrement())
+//   name String
+//   desc String
+
+//   group Group @relation(fields: [name, desc], references: [name, desc])
+
+//   @@unique([name, desc])
+//   @@map("GROUPPROFILES")
+// }
+
+model Message{
+  // 메시지 정보
+  id Int @id @default(autoincrement())
+  content String
+  sender Int
+  group Group @relation(fields: [groupId], references: [id])
+  groupId Int
+  
+  CreatedAt DateTime @default(now())
+
+  @@map("MESSAGES")
 }
 
 model AccountFindQuest{
