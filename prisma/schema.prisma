@@ -56,34 +56,31 @@ model Group{
   CreatedAt DateTime @default(now())
   //groupProfile GroupProfile?
   messages Message[]
-
-  //@@unique([name, desc])
+  groupDescription GroupProfile?
+  @@index([id])
   @@map("GROUPS")
 }
 
 // GroupProfile 테이블 생성 작업은 일단 보류...
-// model GroupProfile{
-//   // 그룹 정보 개요
-//   id Int @id @default(autoincrement())
-//   name String
-//   desc String
-
-//   group Group @relation(fields: [name, desc], references: [name, desc])
-
-//   @@unique([name, desc])
-//   @@map("GROUPPROFILES")
-// }
+model GroupProfile{
+  // 그룹 정보 개요
+  id Int @id @default(autoincrement())
+  name String
+  desc String
+  group Group @relation(fields: [id], references: [id])
+  @@index([id])
+}
 
 model Message{
   // 메시지 정보
   id Int @id @default(autoincrement())
   content String
   sender Int
-  group Group @relation(fields: [groupId], references: [id])
-  groupId Int
+  groupId Int 
+  group Group @relation(fields: [groupId], references: [id],onDelete: Cascade)
   
   CreatedAt DateTime @default(now())
-
+  @@index([groupId])
   @@map("MESSAGES")
 }
 
