@@ -2,7 +2,6 @@
 
 import { DB } from '../db/types';
 import { Kysely,MysqlDialect } from 'kysely'
-import { PlanetScaleDialect } from 'kysely-planetscale'
 import { createPool } from 'mysql2' // do not use 'mysql2/promises'!
 import dotenv from 'dotenv'
 dotenv.config()

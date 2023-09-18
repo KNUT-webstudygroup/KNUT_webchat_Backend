@@ -9,7 +9,10 @@ export const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
-async function run() {
+
+// @LuticaCANARD
+//간단한 몽고DB예제
+export async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
@@ -21,4 +24,3 @@ async function run() {
     await client.close();
   }
 }
-run().catch(console.dir);

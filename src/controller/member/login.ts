@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getUserInfoByLoginId, checkPw } from "../../model/member";
 import { hashPw } from "../../utils/crypto";
+import { client } from "../../utils/mongodb";
 
 /** 
  * @LuticaCANARD
@@ -25,7 +26,7 @@ import { hashPw } from "../../utils/crypto";
  * - login endpoint를 처리할 때 사용할 함수
  */
 
-export const userLogin = async (req:Request<{}, any, any, Record<string, any>>,res:Response) =>{
+export const userLogin = async (req:Request,res:Response) =>{
   const { id, pw } = req.body;
 
   // 같은 로그인 아이디가 존재하는지 찾기
@@ -47,7 +48,9 @@ export const userLogin = async (req:Request<{}, any, any, Record<string, any>>,r
 
   if (existingLoginId && existingPw) {
     console.log("로그인 성공!");
-    return res.status(200).json({});
+
+    req.session["userId"] = id;
+    return res.status(200).json({ID : req.session["userId"]});
   }
 
 }

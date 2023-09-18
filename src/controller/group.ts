@@ -11,8 +11,14 @@ import { insertGroup } from "../model/group";
  * - 5. ID발급시 웹소켓이 살아있다면 바로 업데이트 신호
  * - 6. MYSQL 단에서 서버의 업데이트 시간을 변경... > 유저의 버전관리때 쓸 수 있음.(캐싱의 일종)
  */
+import {User} from '../types/member'
 
-export const createGroup = async (req:Request<{}, any, any, Record<string, any>>, res:Response) => {
+let udserid = 1;
+const user:User = {
+    id:udserid
+}
+
+export const createGroup = async (req:Request, res:Response) => {
 	const { name, admin, capacity, total, desc, tag } = req.body;
 	console.log("req.body", req.body);
     

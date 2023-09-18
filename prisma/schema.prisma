@@ -4,30 +4,31 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 generator kysely {
-    provider = "prisma-kysely"
-    // 타입이 생성될 디렉토리
-    output = "../src/db"
-    // 타입이 생성될 파일명
-    fileName = "types.ts"
-    // Optionally generate runtime enums to a separate file
-    enumFileName = "enums.ts"
+  provider     = "prisma-kysely"
+  // 타입이 생성될 디렉토리
+  output       = "../src/db"
+  // 타입이 생성될 파일명
+  fileName     = "types.ts"
+  // Optionally generate runtime enums to a separate file
+  enumFileName = "enums.ts"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
-
 }
 
 model User {
   // 사용자 정보
-  id       Int     @id @default(autoincrement()) // 기본 키로 지정
-  loginId  String
-  pw       String  
-  email    String
-  phone    String? @db.VarChar(32)
+  id                Int                @id @default(autoincrement()) // 기본 키로 지정
+  loginId           String
+  pw                String
+  email             String
+  AccountFindQuests AccountFindQuest[]
+  phone             String?            @db.VarChar(32)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt // 업데이트 시 자동으로 현재 시간으로 갱신
@@ -35,61 +36,91 @@ model User {
   @@map("USERS") //  DB의 USERS 테이블과 매핑
 }
 
-model UserGroup{
+model AccountFindQuest {
+  userId     Int
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 유저는 1 : 질문은 N이므로. 회원이 삭제되면 질문도 삭제되어야 하므로. 
+  loginId    String
+  email      String
+  questindex Int
+  quest      String
+  answer     String
+
+  @@id([userId, questindex])
+  @@index([userId, questindex])
+}
+
+// 이하 채팅
+model UserGroup {
   userid  Int
   groupId Int
-  @@id([userid,groupId])
+
+  @@id([userid, groupId])
   @@index([userid])
   @@index([groupId])
 }
 
-model Group{
+model Group {
   // 그룹 정보
-  id Int @id @default(autoincrement())
-  name String
-  desc String // 그룹 소개
-  tag String // 그룹 관심사
-  admin Int // 그룹 관리자 id
-  capacity Int // 그룹 최대 인원수
-  total Int // 그룹 현재 인원수
 
-  CreatedAt DateTime @default(now())
-  //groupProfile GroupProfile?
-  messages Message[]
+  id               Int           @id @default(autoincrement())
+  name             String
+  desc             String // 그룹 소개
+  tag              GroupTags[] // 그룹 관심사
+  admin            Int // 그룹 관리자 id
+  capacity         Int // 그룹 최대 인원수
+  total            Int // 그룹 현재 인원수
+  createdAt        DateTime      @default(now())
+  messages         Message[]
   groupDescription GroupProfile?
+
   @@index([id])
   @@map("GROUPS")
 }
 
-// GroupProfile 테이블 생성 작업은 일단 보류...
-model GroupProfile{
-  // 그룹 정보 개요
-  id Int @id @default(autoincrement())
-  name String
-  desc String
-  group Group @relation(fields: [id], references: [id])
-  @@index([id])
+model GroupTags {
+  // 그룹의 태그가 여러개인 경우.
+  groupId  Int
+  groupTag String
+  Group    Group  @relation(fields: [groupId], references: [id])
+  @@index([groupId])
+  @@index([groupTag])
+  @@id([groupId, groupTag])
 }
 
-model Message{
+model Message {
   // 메시지 정보
-  id Int @id @default(autoincrement())
-  content String
-  sender Int
-  groupId Int 
-  group Group @relation(fields: [groupId], references: [id],onDelete: Cascade)
-  
-  CreatedAt DateTime @default(now())
+  // 감안해야 할 부분 :
+  // 보낸시간+유저+그룹을 pk로 잡는다면, 보낸 시간을 pk로 잡는 점에 관해서, https://jjongwoo.tistory.com/49
+  // 생각보다 충돌이 잦을 수 있음을 유의하자.
+  // 만약 그룹별 증가를 쓴다면, 이걸 prisma로 만들어보자.
+  id          Int    @id @default(autoincrement())
+  content     String
+  sender      Int
+  groupId     Int
+  group       Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  imageLinkId Int? // 이미지의 링크들이 담긴 ID if null, there is no images
+
+  sendTime DateTime @default(now())
   @@index([groupId])
   @@map("MESSAGES")
 }
 
-model AccountFindQuest{
-  loginId  String
-  email       String
-  questindex  Int
-  quest       String
-  answer      String
-  @@id([email, questindex])
-  @@index([email, questindex])
+model GroupProfile {
+  // 그룹 정보 개요
+  id    Int    @id @default(autoincrement())
+  name  String
+  desc  String
+  group Group  @relation(fields: [id], references: [id])
+
+  @@index([id])
+}
+
+model GroupChatsImage {
+  imageLinkId Int
+  count       Int
+  link        String
+
+  @@id([imageLinkId, count])
+  @@index([imageLinkId])
 }
