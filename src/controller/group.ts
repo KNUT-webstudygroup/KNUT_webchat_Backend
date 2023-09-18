@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createGroup } from "../model/group";
+import { insertGroup } from "../model/group";
 
 /**
  * @LuticaCANARD
@@ -11,9 +11,6 @@ import { createGroup } from "../model/group";
  * - 5. ID발급시 웹소켓이 살아있다면 바로 업데이트 신호
  * - 6. MYSQL 단에서 서버의 업데이트 시간을 변경... > 유저의 버전관리때 쓸 수 있음.(캐싱의 일종)
  */
-
-
-
 import {User} from '../types/member'
 
 let udserid = 1;
@@ -21,11 +18,11 @@ const user:User = {
     id:udserid
 }
 
-export const groupController = async (req:Request, res:Response) => {
-	const { groupName, admin, capacity, total, groupDesc, groupTag } = req.body;
+export const createGroup = async (req:Request, res:Response) => {
+	const { name, admin, capacity, total, desc, tag } = req.body;
 	console.log("req.body", req.body);
     
-    const result = await createGroup(groupName, admin, capacity, total, groupDesc, groupTag);
+    const result = await insertGroup(name, admin, capacity, total, desc, tag);
 
     if(result[0]?.numInsertedOrUpdatedRows > 0) {
 		console.log("새로운 워크스페이스가 생성되었습니다.");

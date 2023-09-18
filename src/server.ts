@@ -11,6 +11,8 @@ import IdPwFinderRouter from './controller/member/findIdPw'
 import dotenv from 'dotenv' 
 import { groupController } from "./controller/group";
 import {ChatSendProcessor} from './controller/chatting'
+import { createGroup } from "./controller/group";
+import { sendMsg } from "./controller/chatting";
 dotenv.config() //...
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
@@ -49,7 +51,8 @@ app.get("/", (req, res) => {
 app.use('/idpwfind',IdPwFinderRouter);
 app.post("/regist", memberRegister)
 app.post("/login", userLogin);
-app.post("/group", groupController);
+app.post("/group", createGroup);
+app.post("/message", sendMsg);
 
 io.on('connection',function(socket){
   const req = socket.request;

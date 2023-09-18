@@ -63,17 +63,18 @@ model UserGroup{
 
 model Group{
   // 그룹 정보
-  // 그룹의 관심사는 여러개였나 하나였나...
-  groupId Int @id @default(autoincrement())
-  groupName String
-  groupDesc String // 그룹 소개
-  groupTag String // 그룹 관심사
+
+  id Int @id @default(autoincrement())
+  name String
+  desc String // 그룹 소개
+  tag GroupTags[] // 그룹 관심사
   admin Int // 그룹 관리자 id
   capacity Int // 그룹 최대 인원수
   total Int // 그룹 현재 인원수
-
   createdAt DateTime @default(now())
-
+  messages Message[]
+  groupDescription GroupProfile?
+  @@index([id])
   @@map("GROUPS")
 }
 
@@ -84,23 +85,44 @@ model GroupTags{
   @@id([groupId,groupTag])
 }
 
-model GroupChats{
+model Message{
+  // 메시지 정보
   // 감안해야 할 부분 :
   // 보낸시간+유저+그룹을 pk로 잡는다면, 보낸 시간을 pk로 잡는 점에 관해서, https://jjongwoo.tistory.com/49
   // 생각보다 충돌이 잦을 수 있음을 유의하자.
   // 만약 그룹별 증가를 쓴다면, 이걸 prisma로 만들어보자.
-
-  groupId Int
-  userId  Int // 발신자
-  message String // 보낸 메시지
+  id Int @id @default(autoincrement())
+  content String
+  sender Int
+  groupId Int 
+  group Group @relation(fields: [groupId], references: [id],onDelete: Cascade)
   imageLinkId Int? // 이미지의 링크들이 담긴 ID if null, there is no images
-  sendTime DateTime @default(now()) //보낸 시간
-  
-  @@unique([groupId,userId,sendTime]) //일단 임시방편
-  @@index([groupId])
 
+  sendTime DateTime @default(now())
+  @@index([groupId])
+  @@map("MESSAGES")
 }
 
+
+model GroupProfile{
+  // 그룹 정보 개요
+  id Int @id @default(autoincrement())
+  name String
+  desc String
+  group Group @relation(fields: [id], references: [id])
+  @@index([id])
+}
+
+model AccountFindQuest{
+  loginId  String
+  email       String
+  questindex  Int
+  quest       String
+  answer      String
+  @@id([email, questindex])
+  @@index([email, questindex])
+}
+ 
 model GroupChatsImage{
   imageLinkId Int 
   count Int
