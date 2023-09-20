@@ -54,7 +54,7 @@ export const userLogin = async (req:Request,res:Response) =>{
     console.log("로그인 성공!");
 
     req.session["userId"] = id;
-    return res.status(200).json({
+    return res.status(200).cookie('UUID',id, { maxAge: 900000, httpOnly: true }).json({
       ID : req.session["userId"],
       "result" : true
     }

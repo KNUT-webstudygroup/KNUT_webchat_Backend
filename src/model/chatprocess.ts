@@ -15,9 +15,9 @@ export const insertChat = async (
         await db.insertInto("GroupChatsImage").values({});
     }*/ // 이미지 저장로직
 
-    return await db.insertInto("GroupChats").values({
+    return await db.insertInto("MESSAGES").values({
         groupId : group_id,
-        userId : user_id,
-        message : chat_content
+        sender : user_id,
+        content : chat_content
     }).execute();
 }

@@ -45,15 +45,21 @@ export const ChatSendProcessor = async (req:Socket) =>
 export const sendMsg = async (req:Request, res:Response) => {
 	const { content, sender, groupId } = req.body;
 	console.log("req.body", req.body);
+
     
+    // 여기서 mongoDB로 바꾸는건 서로누나몫으로!
     const result = await insertMsg(content, sender, groupId);
     
     if(result[0]?.numInsertedOrUpdatedRows > 0) {
 		console.log("성공적으로 메시지가 전송되었습니다.");
-		return res.status(200).json({});
+		return res.status(200).json({
+            result:true
+        });
 	}
 	else {
 		console.log("서버로부터 요청이 거부되었습니다.");
-		return res.status(500).json({});
+		return res.status(500).json({
+            result:false
+        });
     }
 }

@@ -26,10 +26,10 @@ export const createGroup = async (req:Request, res:Response) => {
 
     if(result[0]?.numInsertedOrUpdatedRows > 0) {
 		console.log("새로운 워크스페이스가 생성되었습니다.");
-		return res.status(200).json({});
+		return res.status(200).json({ result : true});
 	}
 	else {
 		console.log("서버로부터 요청이 거부되었습니다.");
-		return res.status(500).json({});
+		return res.status(500).json({result : false});
     }
 }
