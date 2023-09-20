@@ -9,10 +9,10 @@ import { memberRegister } from './controller/member/register';
 import session from 'express-session'
 import IdPwFinderRouter from './controller/member/findIdPw'
 import dotenv from 'dotenv' 
-import { groupController } from "./controller/group";
 import {ChatSendProcessor} from './controller/chatting'
 import { createGroup } from "./controller/group";
 import { sendMsg } from "./controller/chatting";
+import BodyParser from'body-parser'
 dotenv.config() //...
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
@@ -33,6 +33,10 @@ const io = new Server(createServer(app));
 app.use(express.json());
 app.use(cors());
 app.use(express.Router());
+app.use(BodyParser.urlencoded({
+  extended: true
+}));
+
 const session_setting = session({
   secret: process.env["session_salt"]||"AMUSOGUM",
   resave: false,

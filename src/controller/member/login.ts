@@ -33,7 +33,9 @@ export const userLogin = async (req:Request,res:Response) =>{
 	const existingLoginId = await getUserInfoByLoginId(id);
 	if(!existingLoginId) {
 		console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
-		return res.status(403).json({}); // 일치하지 않으면 403 에러 메시지 전송
+		return res.status(403).json({
+      "result" : false
+    }); // 일치하지 않으면 403 에러 메시지 전송
 	}
 
   // 비밀번호 해시
@@ -43,14 +45,20 @@ export const userLogin = async (req:Request,res:Response) =>{
   const existingPw = await checkPw(id, hashedPw);
   if(!existingPw) {
 		console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
-		return res.status(403).json({}); // 일치하지 않으면 403 에러 메시지 전송
+		return res.status(403).json({
+      "result" : false
+    }); // 일치하지 않으면 403 에러 메시지 전송
 	}
 
   if (existingLoginId && existingPw) {
     console.log("로그인 성공!");
 
     req.session["userId"] = id;
-    return res.status(200).json({ID : req.session["userId"]});
+    return res.status(200).json({
+      ID : req.session["userId"],
+      "result" : true
+    }
+    );
   }
 
 }
