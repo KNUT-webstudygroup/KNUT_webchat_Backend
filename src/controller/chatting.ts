@@ -2,6 +2,7 @@ import {Socket} from 'socket.io';
 import { insertChat } from '../model/chatprocess';
 import { Request, Response } from "express";
 import { insertMsg } from "../model/message";
+import { isObjectBindingPattern } from 'typescript';
 
 /**
  * @author LuticaCANARD
@@ -24,7 +25,7 @@ export const ChatSendProcessor = async (req:Socket) =>
      * >> 메세지 삽입시 유의사항 :
      * - WS의 사용이 확인된 바, ws메세지 발신을 추진한다.
      * - 결정에 따라서 몽고DB의 사용을 정의.
-     * - 채팅 입력받는건 HTTP로 받자.
+     * - 채팅 입력받는건 HTTP로 받자. -> 이젠트 발신이 문제. socket.io로 하면 괜찮을지도.
      */
     
     /*
@@ -44,15 +45,21 @@ export const ChatSendProcessor = async (req:Socket) =>
 export const sendMsg = async (req:Request, res:Response) => {
 	const { content, sender, groupId } = req.body;
 	console.log("req.body", req.body);
-    
-    const result = await insertMsg(content, sender, groupId);
 
+    
+    // 여기서 mongoDB로 바꾸는건 서로누나몫으로!
+    const result = await insertMsg(content, sender, groupId);
+    
     if(result[0]?.numInsertedOrUpdatedRows > 0) {
 		console.log("성공적으로 메시지가 전송되었습니다.");
-		return res.status(200).json({});
+		return res.status(200).json({
+            result:true
+        });
 	}
 	else {
 		console.log("서버로부터 요청이 거부되었습니다.");
-		return res.status(500).json({});
+		return res.status(500).json({
+            result:false
+        });
     }
 }

@@ -9,10 +9,10 @@ import { memberRegister } from './controller/member/register';
 import session from 'express-session'
 import IdPwFinderRouter from './controller/member/findIdPw'
 import dotenv from 'dotenv' 
-import { groupController } from "./controller/group";
 import {ChatSendProcessor} from './controller/chatting'
 import { createGroup } from "./controller/group";
 import { sendMsg } from "./controller/chatting";
+import BodyParser from'body-parser'
 dotenv.config() //...
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
@@ -31,12 +31,24 @@ const port = 4300;
 const app = express(); 
 const io = new Server(createServer(app));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  credentials: true
+}));
 app.use(express.Router());
+app.use(BodyParser.urlencoded({
+  extended: true
+}));
+
 const session_setting = session({
   secret: process.env["session_salt"]||"AMUSOGUM",
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    sameSite: false,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 1000,
+    httpOnly: true,
+  },
 })
 app.use(session_setting)
 io.engine.use(session_setting);
@@ -56,7 +68,9 @@ app.post("/message", sendMsg);
 
 io.on('connection',function(socket){
   const req = socket.request;
+  console.log('a')
   socket.use((__, next) => {
+
     req.session.reload((err) => {
       if (err) {
         socket.disconnect();

@@ -31,14 +31,18 @@ export const memberRegister = async (req:Request, res:Response) => {
 	const existingLoginId = await getUserInfoByLoginId(id);
 	if(existingLoginId) {
 		console.log("이미 가입된 아이디입니다.");
-		return res.status(403).json({}); // 존재하면 403 에러 메시지 전송
+		return res.status(403).json({
+			"result" : true
+		}); // 존재하면 403 에러 메시지 전송
 	}
 
 	// 같은 이메일이 존재하는지 찾기
 	const existingEmail = await getUserInfoByEmail(email);
 	if(existingEmail) {
 		console.log("이미 가입된 이메일입니다.");
-		return res.status(403).json({}); // 존재하면 403 에러 메시지 전송
+		return res.status(403).json({
+			"result" : false
+		}); // 존재하면 403 에러 메시지 전송
 	}
 
 	// 비밀번호 해시

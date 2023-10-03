@@ -13,6 +13,5 @@ export const insertGroup = async (name: string, admin: number, capacity: number,
         capacity,
         total,
         desc,
-        tag,
     }).execute();
 }
