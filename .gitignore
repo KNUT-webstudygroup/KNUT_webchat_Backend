@@ -29,5 +29,6 @@ dist-ssr
 /.vscode/*
 # Prisma
 .env
-/src/db/*
+/src/server/db/*
 /package-lock.json
+/prisma/ERD.*

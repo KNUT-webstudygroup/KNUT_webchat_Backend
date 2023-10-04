@@ -21,7 +21,7 @@ export const setLoginState = () => {
       .post(`http://localhost:${port}/api/login`, { // '/login'으로 ID와 PW를 담은 객체를 post 방식으로 전송
         id: id2,
         pw: pw,
-      })
+      }) 
       .then(async(response:any) => { // 서버에서 온 응답
         // id, pw 일치했다고 가정하고 true 받아옴
         if (response.data.result === true) { // 로그인 성공

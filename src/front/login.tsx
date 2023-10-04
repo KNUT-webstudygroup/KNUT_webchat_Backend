@@ -80,7 +80,7 @@ function login() {
             <button onClick={onSubmit}>{t('login:login')}</button>
           </div>
           <div className="linkbox">
-            <Link to={"/KNUT_webchat_frontend/regist/"}>
+            <Link to={"/regist/"}>
               <span>회원가입</span>
             </Link>
           </div>

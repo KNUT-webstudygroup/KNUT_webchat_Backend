@@ -90,8 +90,11 @@ io.on('connection',function(socket){
   });
 })
 io.on('send_chat',ChatSendProcessor)
+
+// Guide : 
+// https://github.com/szymmis/vite-express
 ViteExpress.config({
-  ignorePaths:/\/api\/*/g
+  ignorePaths:/\/api\/*/g // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
 
 })
 ViteExpress.listen(
@@ -100,5 +103,3 @@ ViteExpress.listen(
   }
 )
 
-// 웹소켓 서버의 역할 : KAFKA에서 일어난 이벤트(멘션,채팅)을 전달시키는 용도에 한정
-// HTTP 서버의 역할 : 그 외 전체.

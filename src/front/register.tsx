@@ -15,7 +15,7 @@ function register() {
     const id = e.currentTarget.userid.value;
     const email = e.currentTarget.email.value;
     const pw = e.currentTarget.password.value;
-    fetch(`http://localhost:${port}/regist`, {
+    fetch(`http://localhost:${port}/api/regist`, {
       method: 'POST',
       headers : {
         'Content-Type' : 'application/json',
@@ -25,8 +25,9 @@ function register() {
         email,
         pw
       })
-    }).then(response =>{ //쿠키에, 상태를 저장하고, 다른페이지로 이동하라.
-      let res = response.json()
+    }).then(async response =>{ //쿠키에, 상태를 저장하고, 다른페이지로 이동하라.
+      let res = await response.json()
+      console.log(res)
 
     })
   }
