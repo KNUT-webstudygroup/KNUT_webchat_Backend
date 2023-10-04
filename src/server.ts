@@ -91,11 +91,23 @@ io.on('connection',function(socket){
 })
 io.on('send_chat',ChatSendProcessor)
 
-// Guide : 
-// https://github.com/szymmis/vite-express
-ViteExpress.config({
-  ignorePaths:/\/api\/*/g // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
 
+
+// SSR (vite-express) Guide :
+// https://github.com/szymmis/vite-express
+
+// T.F
+function transformer(html: string, req: express.Request) {
+  return html.replace(
+    "<!-- placeholder -->", // I(s) 
+    `<meta name="custom" content="${req.baseUrl}"/>` // O(s)
+    // 멱등성 무의미.
+  )
+}
+
+ViteExpress.config({
+  ignorePaths:/\/api\/*/g, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
+  transformer
 })
 ViteExpress.listen(
   app,port,() => {
