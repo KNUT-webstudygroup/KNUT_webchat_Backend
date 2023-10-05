@@ -5,10 +5,22 @@
       "esModuleInterop": true,
       "moduleResolution": "nodenext",
       "outDir": "dist",
+      "allowJs": false,
+      "skipLibCheck": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": false,
+      "forceConsistentCasingInFileNames": true,
       "resolveJsonModule": true,
-
+      "isolatedModules": false,
+      "noEmit": true,
+      "jsx": "react-jsx",
+      "lib": [
+        "DOM",
+        "DOM.Iterable",
+        "ESNext"
+      ],
       
   },
-  "include": ["src/**/*","*.ts"]
+  "include": ["src/**/*","*.ts", "vite.config.mts"]
 
 }

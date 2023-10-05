@@ -4,14 +4,15 @@ import {Request, Response, NextFunction} from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { userLogin } from "./controller/member/login"
-import { memberRegister } from './controller/member/register';
+import { userLogin } from "./server/controller/member/login"
+import { memberRegister } from './server/controller/member/register';
 import session from 'express-session'
-import IdPwFinderRouter from './controller/member/findIdPw'
+import IdPwFinderRouter from './server/controller/member/findIdPw'
 import dotenv from 'dotenv' 
-import {ChatSendProcessor} from './controller/chatting'
-import { createGroup } from "./controller/group";
-import { sendMsg } from "./controller/chatting";
+import ViteExpress from "vite-express";
+import {ChatSendProcessor} from './server/controller/chatting'
+import { createGroup } from "./server/controller/group";
+import { sendMsg } from "./server/controller/chatting";
 import BodyParser from'body-parser'
 dotenv.config() //...
 
@@ -24,7 +25,6 @@ declare module "http" { // d.ts만들어서 나중에 분리하기.
       }
   }
 }
-
 
 // http 서버 넣어주자.
 const port = 4300;
@@ -61,10 +61,13 @@ app.get("/", (req, res) => {
 });
 
 app.use('/idpwfind',IdPwFinderRouter);
-app.post("/regist", memberRegister)
-app.post("/login", userLogin);
-app.post("/group", createGroup);
-app.post("/message", sendMsg);
+const api_router = express.Router();
+api_router.post("/regist", memberRegister)
+api_router.post("/login", userLogin);
+api_router.post("/group", createGroup);
+api_router.post("/message", sendMsg);
+app.use('/api',api_router)
+
 
 io.on('connection',function(socket){
   const req = socket.request;
@@ -89,9 +92,26 @@ io.on('connection',function(socket){
 io.on('send_chat',ChatSendProcessor)
 
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
 
-// 웹소켓 서버의 역할 : KAFKA에서 일어난 이벤트(멘션,채팅)을 전달시키는 용도에 한정
-// HTTP 서버의 역할 : 그 외 전체.
+// SSR (vite-express) Guide :
+// https://github.com/szymmis/vite-express
+
+// T.F
+function transformer(html: string, req: express.Request) {
+  return html.replace(
+    "<!-- placeholder -->", // I(s) 
+    `<meta name="custom" content="${req.baseUrl}"/>` // O(s)
+    // 멱등성 무의미.
+  )
+}
+
+ViteExpress.config({
+  ignorePaths:/\/api\/*/g, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
+  transformer
+})
+ViteExpress.listen(
+  app,port,() => {
+    console.log(`Server running on http://localhost:${port}`);
+  }
+)
+
