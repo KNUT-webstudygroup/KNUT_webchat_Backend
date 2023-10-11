@@ -14,6 +14,8 @@ import {ChatSendProcessor} from './server/controller/chatting'
 import { createGroup } from "./server/controller/group";
 import { sendMsg } from "./server/controller/chatting";
 import BodyParser from'body-parser'
+import https from 'https';
+import fs from 'fs';
 dotenv.config() //...
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
@@ -27,9 +29,11 @@ declare module "http" { // d.ts만들어서 나중에 분리하기.
 }
 
 // http 서버 넣어주자.
-const port = 4300;
+const port = 12345;
 const app = express(); 
 const io = new Server(createServer(app));
+const https_use = true; // mkcert로 https 사용하면 그때 판정
+
 app.use(express.json());
 app.use(cors({
   credentials: true
@@ -105,13 +109,24 @@ function transformer(html: string, req: express.Request) {
   )
 }
 
+const SSLOptions = {
+  key: fs.readFileSync('./key/private.pem'),
+  cert: fs.readFileSync('./key/public.pem')
+};
 ViteExpress.config({
-  ignorePaths:/\/api\/*/g, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
+  ignorePaths:/{\/vrchat\/*|\/api\/*}/, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
   transformer
 })
-ViteExpress.listen(
-  app,port,() => {
+
+if(https_use){
+  const server = https.createServer(SSLOptions,app);
+  server.listen(port,()=>{
+    console.log(`Server running on https://localhost:${port}`);
+  });
+  ViteExpress.bind(app,server)
+}else{
+  ViteExpress.listen(app,port,()=>{
     console.log(`Server running on http://localhost:${port}`);
-  }
-)
+  });
+}
 

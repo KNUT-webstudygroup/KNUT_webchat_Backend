@@ -32,3 +32,5 @@ dist-ssr
 /src/server/db/*
 /package-lock.json
 /prisma/ERD.*
+
+/key/*
