@@ -58,11 +58,11 @@ export type UserGroup = {
 };
 export type DB = {
 	AccountFindQuest: AccountFindQuest;
-	GROUPS: Group;
 	GroupChatsImage: GroupChatsImage;
 	GroupProfile: GroupProfile;
+	GROUPS: Group;
 	GroupTags: GroupTags;
 	MESSAGES: Message;
-	USERS: User;
 	UserGroup: UserGroup;
+	USERS: User;
 };
