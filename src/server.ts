@@ -16,6 +16,7 @@ import { sendMsg } from "./server/controller/chatting";
 import BodyParser from'body-parser'
 import https from 'https';
 import fs from 'fs';
+import passport from 'passport'
 dotenv.config() //...
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
@@ -55,6 +56,8 @@ const session_setting = session({
   },
 })
 app.use(session_setting)
+app.use(passport.initialize());
+app.use(passport.session()); 
 io.engine.use(session_setting);
 io.use((socket, next) => {
   session_setting(socket.request as Request, {} as Response, next as NextFunction);
@@ -63,11 +66,10 @@ io.use((socket, next) => {
 app.get("/", (req, res) => {
   res.json({ key: "value" });
 });
-
-app.use('/idpwfind',IdPwFinderRouter);
 const api_router = express.Router();
 api_router.post("/regist", memberRegister)
 api_router.post("/login", userLogin);
+api_router.use('/idpwfind',IdPwFinderRouter);
 api_router.post("/group", createGroup);
 api_router.post("/message", sendMsg);
 app.use('/api',api_router)
