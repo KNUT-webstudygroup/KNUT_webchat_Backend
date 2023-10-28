@@ -54,7 +54,7 @@
   "scripts": {
     "build": "prisma generate & tsc & sass ./src/front/app.scss ./src/front/app.css && vite build",
     "start": "node ./dist/server.js",
-    "dev": "nodemon -L --watch src/ --exec ts-node src/server.ts ",
+    "dev": "sass ./src/front/app.scss ./src/front/app.css & nodemon -L --watch src/ --exec ts-node src/server.ts ",
     "preview": "vite preview"
   },
   "devDependencies": {
