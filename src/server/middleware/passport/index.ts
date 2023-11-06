@@ -26,8 +26,8 @@ export default () => {
         // 즉, id를 sql로 조회해서 전체 정보를 가져오는 복구 로직이다.
         /*User.findOne({ where: { id } })
         .then(user => done(null, user)) //? done()이 되면 이제 다시 req.login(user, ...) 쪽으로 되돌아가 다음 미들웨어를 실행하게 된다.
-        .catch(err => done(err));
-    });*/
+        .catch(err => done(err));*/
+    });
     
     //^ 위의 이러한 일련의 과정은, 그냥 처음부터 user객체를 통째로 주면 될껄 뭘 직렬화/역직렬화를 하는 이유는
     //^ 세션 메모리가 한정되어있기때문에 효율적으로 하기위해, user.id값 하나만으로 받아와서, 
@@ -37,5 +37,4 @@ export default () => {
     
     local();
     google();
-});
 }
