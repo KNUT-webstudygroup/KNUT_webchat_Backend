@@ -3,7 +3,7 @@ import viteLogo from '/vite.svg'
 import './app.css'
 import React, { Component, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './login'
+import Login from './login/login'
 import Register from './register'
 import MainPage from './mainapp/main';
 import SettingPage from './Setting/setting';

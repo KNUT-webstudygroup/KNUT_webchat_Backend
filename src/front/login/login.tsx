@@ -1,32 +1,32 @@
 import { useState, useRef,useEffect } from "react";
 import axios from "axios";
-import isRealServer from './logics'
+import isRealServer from '../logics'
 import { useTranslation } from 'react-i18next'
 import i18n from "i18next";
-import { Link,Navigate } from "react-router-dom";
-import cookie from 'react-cookies';
+import { Link,Navigate,useNavigate  } from "react-router-dom";
 import { redirect } from "react-router-dom";
-import {setLoginState} from  './state/setLoginState'
-import { port } from "./states";
+import {setLoginState} from  '../state/setLoginState'
+import { port } from "../states";
+import {setCookie,getCookie} from '../cookie/cookie'
 
 
 function login() {
-  const state = cookie.load('logined') === 'true'
+  const state = getCookie('logined') === 'true'
   if(state==true) return(
-    <Navigate to={"/KNUT_webchat_frontend/"}></Navigate >
+    <Navigate to={"/"}></Navigate >
   )
   const {t} = useTranslation(['login']) // t는 번역을 위한 함수(i18n 폴더에 en/ko ver. 문구 정리되어 있음!)
   const userid = useRef<HTMLInputElement>(null); // ref={userid}인 html input 요소 참조함
   const password = useRef<HTMLInputElement>(null); // ref={password}인 html input 요소 참조함
   let id; // id input에 입력한 값
   let pw; // pw input에 입력한 값
+  const mover = useNavigate()
   const onSubmit = async (e: any) => {
     e.preventDefault(); // form은 이벤트를 만나면 자동으로 새로고침하는 성질이 있기 때문에 이를 막아준다.
     console.log(t('login:tryinglogin'));
     console.log(isRealServer()) // 요건 왜 쓰는거지..?
     let id2 = userid?.current?.value // 옵셔널 체이닝, 값이 있는 경우에만 접근하며 값이 없다면 undefined 반환
     let pw2 = password?.current?.value
-    
     if (!id2) {alert("Please enter your ID!");return;} // id, pw가 없으면 post 요청 막아야 됨...
     else if (!pw2) {alert("Please enter your PW!");return;}
 
@@ -41,16 +41,16 @@ function login() {
           console.log(response.data);
 					console.log(t('login:suc'));
           const maxAge = 1000;
-          cookie.save('logined','true',{maxAge,
-            expires: new Date(Date.now() + maxAge * 1000),
-  });
-          window.location.href = '/'
+
+          setCookie('logined','true',{maxAge,
+            expires: new Date(Date.now() + maxAge * 1000)});
+          mover('/');
         } else { // ID or PW가 일치하지 않아 로그인 실패
-          console.log(t('login:faildesc'));
+          alert(t('login:faildesc'));
         }
       })
       .catch((err) => { // 로그인 실패
-        console.log(t('login:fail') + ':' + err)
+        alert(t('login:fail') + ':' + err)
       }
       )
   };

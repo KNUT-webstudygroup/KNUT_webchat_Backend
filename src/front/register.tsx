@@ -10,7 +10,6 @@ function register() {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const port = 4300;
     e.preventDefault();
     const id = e.currentTarget.userid.value;
     const email = e.currentTarget.email.value;
@@ -29,10 +28,10 @@ function register() {
         email,
         pw
       })
-    }).then(async response =>{ //쿠키에, 상태를 저장하고, 다른페이지로 이동하라.
+    }).then(async response =>{
       let res = await response.json()
       console.log(res)
-
+      window.location.href = '/login'
     })
   }
   return (

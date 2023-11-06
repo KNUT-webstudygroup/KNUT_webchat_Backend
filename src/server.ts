@@ -64,36 +64,35 @@ io.use((socket, next) => {
   session_setting(socket.request as Request, {} as Response, next as NextFunction);
 });
 
-app.get("/", (req, res) => {
-  res.json({ key: "value" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ key: "value" });
+// });
 const api_router = express.Router();
 api_router.post("/regist", memberRegister)
 api_router.post("/login", (req, res, next) => { passport.authenticate('local',{ failureRedirect: '/login' }, function(err, user, info) {
   if (err) { return next(err); }
   if (!user) { return res.redirect('/login'); }
-/**
- * if (err) {
-    res.status(403).json({
-        "result" : false
-    }); 
-    //next(err);
-  }else{
-    req.session["userId"] = id;
-    return res.status(200).cookie('UUID',id, { maxAge: 900000, httpOnly: true }).json({
+  req.logIn(user, function(err) {
+    ;
+    if (err) { res.status(403).json({
+      "result" : false
+  });  }
+      //res.cookie('logined','true')
+      res.status(200).cookie('UUID',user, { maxAge: 900000, httpOnly: true }).json({
         ID : req.session["userId"],
         "result" : true
-    }
-  }
-  next();
-  console.log('You are logged in!');}
- */
-
-  req.logIn(user, function(err) {
-    if (err) { return next(err); }
-    return res.redirect('/users/' + user.username);
+    })
   });
 })(req, res, next);});
+api_router.post("/logout",(req,res,next)=>{
+  req.logout((err)=>{
+    
+    res.status(400);
+  });
+  res.cookie('logined','null');
+
+  res.json({res:true});
+});
 api_router.use('/idpwfind',IdPwFinderRouter);
 api_router.post("/group", createGroup);
 api_router.post("/message", sendMsg);
