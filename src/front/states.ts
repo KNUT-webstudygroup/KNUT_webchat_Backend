@@ -23,7 +23,6 @@ export const loginedStateSetter = selector({
     return state
   },
   set: ({ set }, state_) => {
-    
     set(loginedState, state_);
   },
 })

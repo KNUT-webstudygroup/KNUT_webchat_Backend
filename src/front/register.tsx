@@ -15,7 +15,11 @@ function register() {
     const id = e.currentTarget.userid.value;
     const email = e.currentTarget.email.value;
     const pw = e.currentTarget.password.value;
-    fetch(`http://localhost:${port}/api/regist`, {
+    if(!(id&&email&&pw)) {
+      alert('Please enter your information!')  
+      return;
+    }
+    fetch(`/api/regist`, {
       method: 'POST',
       headers : {
         'Content-Type' : 'application/json',

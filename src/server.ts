@@ -33,7 +33,7 @@ declare module "http" { // d.ts만들어서 나중에 분리하기.
 const port = 12345;
 const app = express(); 
 const io = new Server(createServer(app));
-const https_use = true; // mkcert로 https 사용하면 그때 판정
+const https_use = process.env["https_private_key"]; // mkcert로 https 사용하면 그때 판정
 
 app.use(express.json());
 app.use(cors({
@@ -104,23 +104,26 @@ io.on('send_chat',ChatSendProcessor)
 
 // T.F
 function transformer(html: string, req: express.Request) {
-  return html.replace(
+  let os = html.replace(
     "<!-- placeholder -->", // I(s) 
     `<meta name="custom" content="${req.baseUrl}"/>` // O(s)
     // 멱등성 무의미.
   )
+  os = os.replace("<!-- !host! -->",'')
+  return os;
 }
 
-const SSLOptions = {
-  key: fs.readFileSync('./key/private.pem'),
-  cert: fs.readFileSync('./key/public.pem')
-};
+
 ViteExpress.config({
-  ignorePaths:/{\/vrchat\/*|\/api\/*}/, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
+  ignorePaths:/{\/api\/*}/, // api/ 로 시작하는 모든 요청에 대하여 SSR무시.
   transformer
 })
 
-if(https_use){
+if(https_use!=undefined){
+  const SSLOptions = {
+    key: fs.readFileSync(process.env["https_private_key"]),
+    cert: fs.readFileSync(process.env["https_public_key"])
+  };
   const server = https.createServer(SSLOptions,app);
   server.listen(port,()=>{
     console.log(`Server running on https://localhost:${port}`);
