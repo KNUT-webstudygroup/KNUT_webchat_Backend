@@ -68,7 +68,10 @@ app.get("/", (req, res) => {
 });
 const api_router = express.Router();
 api_router.post("/regist", memberRegister)
-api_router.post("/login", userLogin);
+api_router.post("/login", passport.authenticate('local',{ failureRedirect: '/login' }), (err, req, res, next) => {
+  if (err) next(err);
+  console.log('You are logged in!');
+});
 api_router.use('/idpwfind',IdPwFinderRouter);
 api_router.post("/group", createGroup);
 api_router.post("/message", sendMsg);

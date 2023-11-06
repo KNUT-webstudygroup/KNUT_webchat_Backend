@@ -1,8 +1,44 @@
 import passport from 'passport';
 import {LocalStrategy} from 'passport-local';
 import bcrypt from 'bcrypt';
-
-
+import { Request, Response } from "express";
+import { getUserInfoByLoginId, checkPw } from "../../model/member";
+import { hashPw } from "../../utils/crypto";
+const userLogin = async (id,pw) =>{
+    
+    // 같은 로그인 아이디가 존재하는지 찾기
+    const existingLoginId = await getUserInfoByLoginId(id);
+    if(!existingLoginId) {
+        console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
+        return res.status(403).json({
+            "result" : false
+        }); // 일치하지 않으면 403 에러 메시지 전송
+    }
+    
+    // 비밀번호 해시
+    const hashedPw = hashPw(pw);
+    
+    // 비밀번호가 일치하는지 확인
+    const existingPw = await checkPw(id, hashedPw);
+    if(!existingPw) {
+        console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
+        return res.status(403).json({
+            "result" : false
+        }); // 일치하지 않으면 403 에러 메시지 전송
+    }
+    
+    if (existingLoginId && existingPw) {
+        console.log("로그인 성공!");
+        
+        req.session["userId"] = id;
+        return res.status(200).cookie('UUID',id, { maxAge: 900000, httpOnly: true }).json({
+            ID : req.session["userId"],
+            "result" : true
+        }
+        );
+    }
+    
+}
 // @author @LuticaCANARD 
 // TODO : 멤버 직렬화 구현
 // 참조 :
@@ -15,8 +51,8 @@ export default ()=>{
             {
                 // passport의 전략에 따라 달린일이니 잘 확인할것.
                 //* req.body 객체인자 하고 키값이 일치해야 한다.
-                usernameField: 'email', // req.body.email
-                passwordField: 'password', // req.body.password
+                usernameField: 'id', // req.body.email
+                passwordField: 'pw', // req.body.password
                 /*
                 session: true, // 세션에 저장 여부
                 passReqToCallback: false, 
@@ -29,6 +65,8 @@ export default ()=>{
                 try {
                     //TODO : 멤버 확인 로직 이전.
                     // 가입된 회원인지 아닌지 확인
+                    
+                    
                     const exUser = true;
                     // 만일 가입된 회원이면
                     if (exUser) {

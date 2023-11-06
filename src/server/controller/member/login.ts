@@ -26,39 +26,4 @@ import { client } from "../../utils/mongodb";
  * - login endpoint를 처리할 때 사용할 함수
  */
 
-export const userLogin = async (req:Request,res:Response) =>{
-  const { id, pw } = req.body;
 
-  // 같은 로그인 아이디가 존재하는지 찾기
-	const existingLoginId = await getUserInfoByLoginId(id);
-	if(!existingLoginId) {
-		console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
-		return res.status(403).json({
-      "result" : false
-    }); // 일치하지 않으면 403 에러 메시지 전송
-	}
-
-  // 비밀번호 해시
-	const hashedPw = hashPw(pw);
-
-  // 비밀번호가 일치하는지 확인
-  const existingPw = await checkPw(id, hashedPw);
-  if(!existingPw) {
-		console.log("아이디 또는 비밀번호가 일치하지 않습니다.");
-		return res.status(403).json({
-      "result" : false
-    }); // 일치하지 않으면 403 에러 메시지 전송
-	}
-
-  if (existingLoginId && existingPw) {
-    console.log("로그인 성공!");
-
-    req.session["userId"] = id;
-    return res.status(200).cookie('UUID',id, { maxAge: 900000, httpOnly: true }).json({
-      ID : req.session["userId"],
-      "result" : true
-    }
-    );
-  }
-
-}
