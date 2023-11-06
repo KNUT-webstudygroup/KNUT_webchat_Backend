@@ -31,7 +31,7 @@ function login() {
     else if (!pw2) {alert("Please enter your PW!");return;}
 
     await axios
-      .post(`http://localhost:${port}/api/login`, { // '/login'으로 ID와 PW를 담은 객체를 post 방식으로 전송
+      .post(`/api/login`, { // '/login'으로 ID와 PW를 담은 객체를 post 방식으로 전송
         id: id2,
         pw: pw2,
       })

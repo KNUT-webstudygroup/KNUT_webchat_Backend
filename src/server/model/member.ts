@@ -36,7 +36,15 @@ export const getUserInfoByLoginId = async (loginId: string) : Promise<{loginId:s
 		.select(["USERS.loginId"])
 		.executeTakeFirst();
 }
-
+export const getUserInfoByLoginIdPw = async (loginId: string,pw:string) : Promise<{loginId:string}> => {
+	// 같은 로그인 아이디가 존재하는지 찾기
+	return await db
+		.selectFrom("USERS")
+		.where("loginId", "=", loginId)
+		.where("pw","=",pw)
+		.select(["USERS.loginId"])
+		.executeTakeFirst();
+}
 export const getUserInfoByEmail = async (email: string) : Promise<{email:string}> => {
 	// 같은 이메일이 존재하는지 찾기
 	return await db

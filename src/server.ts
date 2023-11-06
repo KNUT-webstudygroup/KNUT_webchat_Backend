@@ -4,7 +4,6 @@ import {Request, Response, NextFunction} from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { userLogin } from "./server/controller/member/login"
 import { memberRegister } from './server/controller/member/register';
 import session from 'express-session'
 import IdPwFinderRouter from './server/controller/member/findIdPw'
@@ -17,7 +16,9 @@ import BodyParser from'body-parser'
 import https from 'https';
 import fs from 'fs';
 import passport from 'passport'
+import passportConfig from './server/middleware/passport/index'
 dotenv.config() //...
+passportConfig();
 
 declare module "http" { // d.ts만들어서 나중에 분리하기.
   interface IncomingMessage {
@@ -68,10 +69,31 @@ app.get("/", (req, res) => {
 });
 const api_router = express.Router();
 api_router.post("/regist", memberRegister)
-api_router.post("/login", passport.authenticate('local',{ failureRedirect: '/login' }), (err, req, res, next) => {
-  if (err) next(err);
-  console.log('You are logged in!');
-});
+api_router.post("/login", (req, res, next) => { passport.authenticate('local',{ failureRedirect: '/login' }, function(err, user, info) {
+  if (err) { return next(err); }
+  if (!user) { return res.redirect('/login'); }
+/**
+ * if (err) {
+    res.status(403).json({
+        "result" : false
+    }); 
+    //next(err);
+  }else{
+    req.session["userId"] = id;
+    return res.status(200).cookie('UUID',id, { maxAge: 900000, httpOnly: true }).json({
+        ID : req.session["userId"],
+        "result" : true
+    }
+  }
+  next();
+  console.log('You are logged in!');}
+ */
+
+  req.logIn(user, function(err) {
+    if (err) { return next(err); }
+    return res.redirect('/users/' + user.username);
+  });
+})(req, res, next);});
 api_router.use('/idpwfind',IdPwFinderRouter);
 api_router.post("/group", createGroup);
 api_router.post("/message", sendMsg);
