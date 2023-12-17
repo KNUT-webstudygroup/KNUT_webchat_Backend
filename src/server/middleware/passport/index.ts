@@ -2,6 +2,7 @@
 import local from './local'
 import passport from 'passport'
 import google from './google'
+import * as model from '../../model/user'
 export default () => {
     /*
     * ㅇ 직렬화(Serialization) : 객체를 직렬화하여 전송 가능한 형태로 만드는 것.
@@ -21,9 +22,15 @@ export default () => {
     
     //? deserializeUser는 serializeUser()가 done하거나 passport.session()이 실행되면 실행된다.
     //? 즉, 서버 요청이 올때마다 항상 실행하여 로그인 유저 정보를 불러와 이용한다.
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser(async (id, done) => {
         // req.session에 저장된 사용자 아이디를 바탕으로 DB 조회로 사용자 정보를 얻어낸 후 req.user에 저장. 
         // 즉, id를 sql로 조회해서 전체 정보를 가져오는 복구 로직이다.
+        if(!id) {
+            done(null,false);
+            return;
+        }
+        const user = await model.getUserInfo(Number(id));
+        done(null,user);
 
         /*User.findOne({ where: { id } })
         .then(user => done(null, user)) //? done()이 되면 이제 다시 req.login(user, ...) 쪽으로 되돌아가 다음 미들웨어를 실행하게 된다.
